@@ -111,4 +111,4 @@ venv.bak/
 dmypy.json
 
 # temp files
-*.docx
+temp

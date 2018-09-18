@@ -112,3 +112,4 @@ dmypy.json
 
 # temp files
 temp
+.vscode

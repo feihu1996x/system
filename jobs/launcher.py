@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 """
-@file: default.py
+@file: launcher.py
 @brief: 启动任务脚本
 @author: feihu1996.cn
 @date: 18-09-17

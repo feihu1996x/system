@@ -21,9 +21,5 @@ QQ_ACCOUNT_LIST = [
 # qq可执行文件路径配置
 QQ_PATH = r"C:\Program Files (x86)\Tencent\QQ\Bin\QQ.exe"
 
-# 导出消息记录按钮的坐标配置
-EXPORT_X_COOR = 912
-EXPORT_Y_COOR = 113
-
-# 保存导出消息原始数据文件的路径
-MSG_PATH = "C:\Users\GSXxg\Desktop\qq_group_spider\msgs"
+# 保存导出消息原始数据文件的默认路径
+MSG_PATH = r"C:\Users\GSXxg\Desktop"

@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
 """
-@file: Autogui.py
-@brief: 自动化GUI获取QQ群消息记录
+@file: AutoExportGroupMsgs.py
+@brief: 自动导出QQ群消息记录
 @author: feihu1996.cn
 @date: 18-09-17
 @version: 1.0
@@ -12,13 +12,10 @@ import time
 
 import pyautogui
 from pywinauto.application import Application
+
 from application import app, db
 
-# TODO:读取配置文件，依次使用不同的账号打开QQ、登录、打开消息管理器、导出QQ群消息记录到指定目录下（先清空该目录）
-
-# TODO:遍历该目录，读取所有消息记录文件，将数据结构化处理后插入到名为original_messages的hive数据表或者mysql数据表或者Redis键中(会实现增量插入)，hive有点吃内存（但可用于分布式计算），同时将数据增量插入到messages数据表中
-
-# 每次函数调用后暂停一秒
+# 每次函数调用后暂停1秒
 pyautogui.PAUSE = 1
 
 # 启动自动防故障功能，将鼠标移到屏幕的左上角的将导致异常
@@ -28,18 +25,21 @@ pyautogui.FAILSAFE = True
 class JobTask():
     """
     python manager.py runjob -m Autogui
-    自动化GUI获取QQ群消息记录
+    自动导出QQ群消息记录
     """
-    def __init__(self):
-        self.msg = "launching Autogui ..."  
+    def __init__(self):  
         self.screen_width, self.screen_height = pyautogui.size()
         self.qq_account_list = app.config['QQ_ACCOUNT_LIST']
         self.qq_path = app.config['QQ_PATH']
         self.export_x_coor = app.config['EXPORT_X_COOR']
         self.export_y_coor = app.config['EXPORT_Y_COOR']
+        self.msg_file_x_coor = app.config['MSG_FILE_X_COOR']
+        self.msg_file_y_coor = app.config['MSG_FILE_Y_COOR']
+        self.msg_type_x_coor = app.config['MSG_TYPE_X_COOR']
+        self.msg_type_y_coor = app.config['MSG_TYPE_Y_COOR']
 
     def run(self, params):
-        app.logger.info( self.msg )
+        app.logger.info( "launching %s ..." % ( __name__ ) )
         app.logger.info( "当前屏幕宽为：" + str( self.screen_width ) + "," + "当前屏幕高为：" + str( self.screen_height ) )
 
         for qq_account in self.qq_account_list:
@@ -97,10 +97,43 @@ class JobTask():
             y = y + 49
             app.logger.info( "鼠标当前的坐标 X:" + str( x ).rjust( 4 ) + " Y:" + str( y ).rjust( 4 ) )
             pyautogui.moveTo( x, y ) 
-            pyautogui.click( x, y )            
+            pyautogui.click( x, y )
+            # 选择消息文件保存类型
+            x = self.msg_file_x_coor
+            y = self.msg_file_y_coor
+            app.logger.info( "鼠标当前的坐标 X:" + str( x ).rjust( 4 ) + " Y:" + str( y ).rjust( 4 ) )     
+            pyautogui.moveTo( x, y )
+            pyautogui.click( x, y )
+            x = self.msg_type_x_coor
+            y = self.msg_type_y_coor
+            app.logger.info( "鼠标当前的坐标 X:" + str( x ).rjust( 4 ) + " Y:" + str( y ).rjust( 4 ) )  
+            pyautogui.moveTo( x, y )
+            pyautogui.click( x, y )
+            # 发送快捷键"Alt+S",保存消息记录文件
+            pyautogui.keyDown('altleft')
+            pyautogui.keyDown('s')
+            pyautogui.keyUp('altleft')
+            pyautogui.keyUp('s')
+            # 如果文件已经存在，则覆盖掉
+            pyautogui.keyDown('altleft')
+            pyautogui.keyDown('y')
+            pyautogui.keyUp('altleft')
+            pyautogui.keyUp('y') 
+            # 关闭消息管理器
+            pyautogui.keyDown( 'altleft' )
+            pyautogui.keyDown( 'f4' )
+            pyautogui.keyUp( 'altleft' )
+            pyautogui.keyUp( 'f4' )
             # qq.QQ.ScrollBar.print_control_identifiers()
 
             # 关闭QQ
-            qq.QQ.close()
-            
+            qq.QQ.click_input()
+            pyautogui.keyDown( 'altleft' )
+            pyautogui.keyDown( 'f4' )
+            pyautogui.keyUp( 'altleft' )
+            pyautogui.keyUp( 'f4' )     
+
+            # 对消息记录进行数据格式化，并保存到数据库   
+
+        app.logger.info( "finished %s" % ( __name__ ) )    
 

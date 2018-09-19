@@ -21,4 +21,7 @@ python manager.py runserver
 # 执行自动导出QQ群消息记录任务脚本
 python manager.py runjob -m AutoExportGroupMsgs
 
+# 执行自动获取QQ群信息任务脚本
+python manager.py runjob -m AutoGetGroupInfo
+
 ```

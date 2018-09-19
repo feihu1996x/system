@@ -14,6 +14,7 @@ import pyautogui
 from pywinauto.application import Application
 
 from application import app, db
+from common.libs.messages.MessagesService import MessagesService
 
 # 每次函数调用后暂停1秒
 pyautogui.PAUSE = 1
@@ -31,18 +32,18 @@ class JobTask():
         self.screen_width, self.screen_height = pyautogui.size()
         self.qq_account_list = app.config['QQ_ACCOUNT_LIST']
         self.qq_path = app.config['QQ_PATH']
+        self.msg_path = app.config['MSG_PATH']
         self.export_x_coor = app.config['EXPORT_X_COOR']
         self.export_y_coor = app.config['EXPORT_Y_COOR']
         self.msg_file_x_coor = app.config['MSG_FILE_X_COOR']
         self.msg_file_y_coor = app.config['MSG_FILE_Y_COOR']
-        self.msg_type_x_coor = app.config['MSG_TYPE_X_COOR']
-        self.msg_type_y_coor = app.config['MSG_TYPE_Y_COOR']
 
     def run(self, params):
         app.logger.info( "launching %s ..." % ( __name__ ) )
         app.logger.info( "当前屏幕宽为：" + str( self.screen_width ) + "," + "当前屏幕高为：" + str( self.screen_height ) )
 
         for qq_account in self.qq_account_list:
+            """
             qq_number = qq_account["qq_number"]
             qq_password = qq_account["qq_password"]
 
@@ -104,8 +105,7 @@ class JobTask():
             app.logger.info( "鼠标当前的坐标 X:" + str( x ).rjust( 4 ) + " Y:" + str( y ).rjust( 4 ) )     
             pyautogui.moveTo( x, y )
             pyautogui.click( x, y )
-            x = self.msg_type_x_coor
-            y = self.msg_type_y_coor
+            y = y + 39
             app.logger.info( "鼠标当前的坐标 X:" + str( x ).rjust( 4 ) + " Y:" + str( y ).rjust( 4 ) )  
             pyautogui.moveTo( x, y )
             pyautogui.click( x, y )
@@ -131,9 +131,16 @@ class JobTask():
             pyautogui.keyDown( 'altleft' )
             pyautogui.keyDown( 'f4' )
             pyautogui.keyUp( 'altleft' )
-            pyautogui.keyUp( 'f4' )     
+            pyautogui.keyUp( 'f4' ) 
+            """    
 
-            # 对消息记录进行数据格式化，并保存到数据库   
+            msgs = open( self.msg_path + r"\全部消息记录.txt","rb" ).read().decode("utf8")
+
+            # 对消息记录进行数据格式化，并增量保存到数据库(original_messages表)   
+            MessagesService.save_export_group_msgs( msgs=msgs )
+
+            # TODO: 一次过滤，first_filter_keys表， 并保存到数据库（messages表），调用公共方法
+
+            # TODO: 二次过滤，second_filter_qqnumber表、second_filter_groupnumber表， 并保存到数据库（messages表），调用公共方法
 
         app.logger.info( "finished %s" % ( __name__ ) )    
-

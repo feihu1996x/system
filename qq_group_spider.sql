@@ -1,4 +1,4 @@
-CREATE DATABASE `qq_group_spider` DEFAULT CHARACTER SET = `utf8mb4`;
+CREATE DATABASE IF NOT EXISTS `qq_group_spider` DEFAULT CHARACTER SET = `utf8mb4`;
 
 USE qq_group_spider;
 
@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS `qq_group`;
 CREATE TABLE `qq_group` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'qq群id',
   `group_name` varchar(100) NOT NULL DEFAULT '' COMMENT 'QQ群名称',
-  `group_number` varchar(100) NOT NULL DEFAULT '' COMMENT 'QQ群号码',
+  `group_number` varchar(100) NOT NULL DEFAULT '暂无' COMMENT 'QQ群号码',
   `updated_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
   `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '插入时间',
   PRIMARY KEY (`id`),
@@ -21,13 +21,13 @@ CREATE TABLE `original_messages` (
   `group_id` varchar(100) NOT NULL DEFAULT '' COMMENT 'QQ群id',
   `sender_name` varchar(100) NOT NULL DEFAULT '' COMMENT '用户昵称',
   `qq_number` varchar(100) NOT NULL DEFAULT '' COMMENT 'QQ号',
-  `content` text NOT NULL DEFAULT '' COMMENT '消息内容',
+  `content` text NOT NULL COMMENT '消息内容',
   `send_time` timestamp NOT NULL COMMENT '消息发布时间',
-  `md5` varchar(32) NOT NULL DEFAULT '' COMMENT '每条消息的md5值',
+  `fingerprint` varchar(32) NOT NULL DEFAULT '' COMMENT '每条消息的fingerprint',
   `updated_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
   `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '插入时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `md5` (`md5`)
+  UNIQUE KEY `fingerprint` (`fingerprint`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='原始消息记录表';
 
 DROP TABLE IF EXISTS `first_filter_keys`;
@@ -70,14 +70,14 @@ CREATE TABLE `messages` (
   `group_id` varchar(100) NOT NULL DEFAULT '' COMMENT 'QQ群id',
   `sender_name` varchar(100) NOT NULL DEFAULT '' COMMENT '用户昵称',
   `qq_number` varchar(100) NOT NULL DEFAULT '' COMMENT 'QQ号',
-  `content` text NOT NULL DEFAULT '' COMMENT '消息内容',
+  `content` text NOT NULL COMMENT '消息内容',
   `send_time` timestamp NOT NULL COMMENT '消息发布时间',
-  `md5` varchar(32) NOT NULL DEFAULT '' COMMENT '每条消息的md5值',
+  `fingerprint` varchar(32) NOT NULL DEFAULT '' COMMENT '每条消息的fingerprint',
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '1：已跟进 0：待跟进 -1 已忽略',
   `operator` varchar(100) NOT NULL DEFAULT 'system' COMMENT '操作者',
   `updated_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
   `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '插入时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `md5` (`md5`)
+  UNIQUE KEY `fingerprint` (`fingerprint`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='消息记录表';
 

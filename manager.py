@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
+from flask_script import Server
+
 import www
 from application import app, manager
-from flask_script import Server
 from jobs.launcher import runJob
 
 # run web server

@@ -20,4 +20,3 @@ def md5_hash( string ):
     string = base64.encodebytes( string.encode("utf-8") )
     m.update(string)
     return m.hexdigest()  
-  

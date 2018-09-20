@@ -2,7 +2,7 @@
 
 """
 @file: AutoGetGroupInfo.py
-@brief: 自动获取QQ群信息
+@brief: 自动获取QQ群信息(QQ群号码)
 @author: feihu1996.cn
 @date: 18-09-19
 @version: 1.0

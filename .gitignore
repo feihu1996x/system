@@ -113,3 +113,5 @@ dmypy.json
 # temp files
 packages
 .vscode
+node_modules
+dist

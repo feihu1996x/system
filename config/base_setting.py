@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+# 统一url前缀
+URL_PREFIX = ""
+# URL_PREFIX = "/system"
+
 # 开发服务器配置
 SERVER_PORT = 8080
 DEBUG = True

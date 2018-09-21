@@ -23,3 +23,13 @@ QQ_PATH = r"C:\Program Files (x86)\Tencent\QQ\Bin\QQ.exe"
 
 # 保存导出消息原始数据文件的默认路径
 MSG_PATH = r"C:\Users\GSXxg\Desktop"
+
+# 消息状态字典
+MESSAGE_STATUS_MAPPING = {
+    0: "待跟进",
+    -1: "已忽略",
+    1: "已跟进"
+}
+
+# 默认分页大小
+PAGE_SIZE = 10

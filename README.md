@@ -31,5 +31,5 @@ python manager.py runjob -m spiders/messages/AutoGetGroupInfo
 - QQ群号码需要再编写一个脚本才能获取
 - 消息抓取和写入数据库同步进行很耗时，可以改成异步的
 - 依赖文件可以区分为Linux和Windows版本的
-- 可以重写app.logger日志模块
-- 需要增加请求中间件
+- 重写app.logger日志模块
+- 通过增加请求拦截器，一方面可以实现统一错误处理，另一方面可以实现API权限控制并从中获取当前登录用户的信息(cookie或者json web token)

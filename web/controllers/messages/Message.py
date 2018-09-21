@@ -11,15 +11,164 @@
 import json
 
 from flask import Blueprint, make_response, request
+from sqlalchemy import or_
 
 from application import app, db
 from common.libs.messages.MessagesService import MessagesService
 from common.models.messages.FirstFilterKeys import FirstFilterKey
+from common.models.messages.Messages import Message
+from common.models.messages.QqGroup import QqGroup
 from common.models.messages.SecondFilterGroupnumber import \
     SecondFilterGroupnumber
 from common.models.messages.SecondFilterQqnumber import SecondFilterQqnumber
 
 route_message = Blueprint( "message", __name__ )
+
+@route_message.route( "/", methods=[ "GET" ] )
+def get_message():
+    """
+    get /message/
+        获取QQ群消息列表
+    """
+    # 获取所有请求参数列表
+    req_dict = request.values
+
+    # 封装响应数据
+    resp_data = {
+        "msg": "操作成功~",
+        "data": {}
+    }
+
+    query = Message.query
+
+    # 根据群号码或者群名称过滤消息列表
+    group = req_dict.get( "group", None )
+    if group:
+        query = query.filter( or_(
+            Message.group_id == ( QqGroup.query.filter_by( group_name=group ).first().id if QqGroup.query.filter_by( group_name=group ).first() else 0 ),
+            Message.group_id == ( QqGroup.query.filter_by( group_number=group ).first().id if QqGroup.query.filter_by( group_number=group ).first() else 0 )
+        ) )
+
+    # 根据项目信息过滤消息列表
+    content = req_dict.get( "content", None )    
+    if content:
+        query = query.filter( Message.content.ilike( "%{0}%".format( content ) ) )
+
+    # 根据发布人QQ过滤消息列表
+    qq_number = req_dict.get( "qq_number", None )
+    if qq_number:
+        query = query.filter_by( qq_number=qq_number )
+
+    # 根据状态过滤消息列表
+    status = req_dict.get( "status", None )
+    if status:
+        query = query.filter_by( status=status )
+
+    # 根据操作人过滤消息列表
+    operator = req_dict.get( "operator", None )
+    if operator:
+        query =query.filter_by( operator=operator )
+
+    # 实现分页加载
+    page = req_dict.get( "page", 1 )
+    try:
+        page = int( page )
+    except:
+        resp_data["msg"] = "参数错误"
+        response = make_response( json.dumps( resp_data ), 406 )
+        response.headers["Content-Type"] = "application/json;charset=utf-8"
+        return response          
+    if page < 1:
+        page = 1        
+    page_size = app.config[ "PAGE_SIZE" ]
+    offset = ( page - 1 ) * page_size
+
+    message_model_list = query.order_by( "updated_time" ).offset( offset ).limit( page_size ).all()
+
+    message_data_list = []
+    if message_model_list:
+        for model in message_model_list:
+            message_data_list.append({
+                "id": model.id,
+                "group_number": QqGroup.query.filter_by( id=model.group_id ).first().group_number if QqGroup.query.filter_by( id=model.group_id ).first() else "暂无",
+                "content": model.content,
+                "qq_number": model.qq_number,
+                "send_time": str( model.send_time ),
+                "status": app.config["MESSAGE_STATUS_MAPPING"][model.status],
+                "operator": model.operator
+            })
+    
+    resp_data[ "data" ][ "message_list" ] = message_data_list
+
+    response = make_response( json.dumps( resp_data ), 200 )
+    response.headers["Content-Type"] = "application/json;charset=utf-8"
+    return response
+
+@route_message.route( "/<message_id>", methods=[ "PATCH" ] )
+def patch_message( message_id ):
+    """
+    patch /message/message_id
+        更新一条消息
+    """
+    # 获取所有请求参数
+    req_dict = request.values
+
+    # 封装响应字段
+    resp_data = {
+        "msg": "操作成功~",
+        "data": {}
+    }    
+
+    if not message_id:
+        resp_data["msg"] = "缺少路由参数"
+        response = make_response( json.dumps( resp_data ), 404 )
+        response.headers["Content-Type"] = "application/json;charset=utf-8"
+        return response
+
+    try:
+        message_id = int( message_id )
+    except:
+        resp_data["msg"] = "参数错误"
+        response = make_response( json.dumps( resp_data ), 406 )
+        response.headers["Content-Type"] = "application/json;charset=utf-8"
+        return response     
+
+    message_model = Message.query.filter_by( id=message_id ).first()
+    if not message_model:
+        resp_data["msg"] = "资源不存在" 
+        response = make_response( json.dumps( resp_data ), 404 )
+        response.headers["Content-Type"] = "application/json;charset=utf-8"
+        return response           
+
+    status = req_dict.get( "status", None )   
+    if not status:
+        resp_data["msg"] = "缺少参数"
+        response = make_response( json.dumps( resp_data ), 404 )
+        response.headers["Content-Type"] = "application/json;charset=utf-8"
+        return response              
+
+    message_model.status = status
+    
+    # TODO:通过请求拦截器获取到当前用户信息
+    message_model.operator = "客户端"
+    
+    db.session.add( message_model )            
+    db.session.commit()
+
+    resp_data[ "data" ] = {
+        "id": message_model.id,
+        "group_number": QqGroup.query.filter_by( id=message_model.group_id ).first().group_number if QqGroup.query.filter_by( id=message_model.group_id ).first() else "暂无",
+        "content": message_model.content,
+        "qq_number": message_model.qq_number,
+        "send_time": str( message_model.send_time ),
+        "status": app.config["MESSAGE_STATUS_MAPPING"][message_model.status],
+        "operator": message_model.operator  
+    }      
+
+    response = make_response( json.dumps( resp_data ), 200 )
+    response.headers["Content-Type"] = "application/json;charset=utf-8"     
+
+    return response      
 
 @route_message.route( "/filter/keys", methods=[ "GET", "POST" ] )
 def get_post_keys():
@@ -40,8 +189,21 @@ def get_post_keys():
     }
 
     if "GET" == request.method:
-        # TODO: 实现分页加载
-        key_model_list = FirstFilterKey.query.order_by( FirstFilterKey.id.desc() ).all()
+        # 实现分页加载
+        page = req_dict.get( "page", 1 )
+        try:
+            page = int( page )
+        except:
+            resp_data["msg"] = "参数错误"
+            response = make_response( json.dumps( resp_data ), 406 )
+            response.headers["Content-Type"] = "application/json;charset=utf-8"
+            return response          
+        if page < 1:
+            page = 1        
+        page_size = app.config[ "PAGE_SIZE" ]
+        offset = ( page - 1 ) * page_size
+
+        key_model_list = FirstFilterKey.query.order_by( FirstFilterKey.id.desc() ).offset( offset ).limit( page_size ).all()
 
         key_data_list = []
 
@@ -86,10 +248,10 @@ def get_post_keys():
 
             return response
 
-@route_message.route( "/filter/keys/<key_id>", methods=[ "PUT", "DELETE" ] )
-def put_delete_keys( key_id ):
+@route_message.route( "/filter/keys/<key_id>", methods=[ "PATCH", "DELETE" ] )
+def patch_delete_keys( key_id ):
     """
-    put /message/filter/keys/key_id
+    patch /message/filter/keys/key_id
         更新一个关键词
     delete /message/filter/keys/key_id
         删除一个关键词         
@@ -124,7 +286,7 @@ def put_delete_keys( key_id ):
         response.headers["Content-Type"] = "application/json;charset=utf-8"
         return response           
 
-    if "PUT" == request.method:
+    if "PATCH" == request.method:
         key_name = req_dict.get( "key_name", None )   
         if not key_name:
             resp_data["msg"] = "缺少参数"
@@ -174,8 +336,21 @@ def get_post_group_numbers():
     }
 
     if "GET" == request.method:
-        # TODO: 实现分页加载
-        number_model_list = SecondFilterGroupnumber.query.order_by( SecondFilterGroupnumber.id.desc() ).all()
+        # 实现分页加载
+        page = req_dict.get( "page", 1 )
+        try:
+            page = int( page )
+        except:
+            resp_data["msg"] = "参数错误"
+            response = make_response( json.dumps( resp_data ), 406 )
+            response.headers["Content-Type"] = "application/json;charset=utf-8"
+            return response          
+        if page < 1:
+            page = 1        
+        page_size = app.config[ "PAGE_SIZE" ]
+        offset = ( page - 1 ) * page_size
+
+        number_model_list = SecondFilterGroupnumber.query.order_by( SecondFilterGroupnumber.id.desc() ).offset( offset ).limit( page_size ).all()
 
         number_data_list = []
 
@@ -220,10 +395,10 @@ def get_post_group_numbers():
 
             return response        
 
-@route_message.route( "/filter/group_numbers/<number_id>", methods=[ "PUT", "DELETE" ] )
-def put_delete_group_numbers( number_id ):
+@route_message.route( "/filter/group_numbers/<number_id>", methods=[ "PATCH", "DELETE" ] )
+def patch_delete_group_numbers( number_id ):
     """
-    put /filter/group_numbers/number_id
+    patch /filter/group_numbers/number_id
         更新一个QQ群号码
     delete /filter/group_numbers/number_id
         删除一个QQ群号码       
@@ -258,7 +433,7 @@ def put_delete_group_numbers( number_id ):
         response.headers["Content-Type"] = "application/json;charset=utf-8"
         return response           
 
-    if "PUT" == request.method:
+    if "PATCH" == request.method:
         group_number = req_dict.get( "group_number", None )   
         if not group_number:
             resp_data["msg"] = "缺少参数"
@@ -308,8 +483,21 @@ def get_post_qq_numbers():
     }
 
     if "GET" == request.method:
-        # TODO: 实现分页加载
-        number_model_list = SecondFilterQqnumber.query.order_by( SecondFilterQqnumber.id.desc() ).all()
+        # 实现分页加载
+        page = req_dict.get( "page", 1 )
+        try:
+            page = int( page )
+        except:
+            resp_data["msg"] = "参数错误"
+            response = make_response( json.dumps( resp_data ), 406 )
+            response.headers["Content-Type"] = "application/json;charset=utf-8"
+            return response          
+        if page < 1:
+            page = 1        
+        page_size = app.config[ "PAGE_SIZE" ]
+        offset = ( page - 1 ) * page_size
+
+        number_model_list = SecondFilterQqnumber.query.order_by( SecondFilterQqnumber.id.desc() ).offset( offset ).limit( page_size ).all()
 
         number_data_list = []
 
@@ -354,10 +542,10 @@ def get_post_qq_numbers():
 
             return response  
 
-@route_message.route( "/filter/qq_numbers/<number_id>", methods=[ "PUT", "DELETE" ] )
-def put_delete_qq_numbers( number_id ):
+@route_message.route( "/filter/qq_numbers/<number_id>", methods=[ "PATCH", "DELETE" ] )
+def patch_delete_qq_numbers( number_id ):
     """
-    put /filter/qq_numbers/number_id
+    patch /filter/qq_numbers/number_id
         更新一个QQ号码
     delete /filter/qq_numbers/number_id
         删除一个QQ号码
@@ -392,7 +580,7 @@ def put_delete_qq_numbers( number_id ):
         response.headers["Content-Type"] = "application/json;charset=utf-8"
         return response           
 
-    if "PUT" == request.method:
+    if "PATCH" == request.method:
         qq_number = req_dict.get( "qq_number", None )   
         if not qq_number:
             resp_data["msg"] = "缺少参数"

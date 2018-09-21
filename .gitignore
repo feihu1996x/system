@@ -111,5 +111,5 @@ venv.bak/
 dmypy.json
 
 # temp files
-temp
+packages
 .vscode

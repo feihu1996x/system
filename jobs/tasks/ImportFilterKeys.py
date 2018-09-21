@@ -2,7 +2,7 @@
 
 """
 @file: ImportFilterKeys.py
-@brief: 将一次过滤关键词导入数据库
+@brief: 将QQ群消息过滤关键词导入数据库
 @author: feihu1996.cn
 @date: 18-09-20
 @version: 1.0

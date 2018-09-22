@@ -7,6 +7,7 @@ URL_PREFIX = ""
 # 开发服务器配置
 SERVER_PORT = 8080
 DEBUG = True
+# DEBUG = False
 
 # sqlalchemy配置
 SQLALCHEMY_ECHO = True

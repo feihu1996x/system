@@ -19,8 +19,11 @@ pip install -r requirements.linux.txt
 # 初始化数据库
 mysql -uroot -p qq_group_spider < qq_group_spider.sql
 
-# 启动 web server
+# 启动 开发服务器
 python manager.py runserver
+
+# 启动 生产服务器
+python server.py
 
 #  将一次过滤初始化关键词导入数据库
 python manager.py runjob -m ImportFilterKeys
@@ -41,5 +44,3 @@ python manager.py runjob -m spiders/messages/AutoGetGroupInfo
 - 消息抓取和写入数据库同步进行很耗时，可以改成异步的
 - 重写app.logger日志模块
 - 通过增加请求拦截器，一方面可以实现统一错误处理，另一方面可以实现API权限控制并从中获取当前登录用户的信息(cookie或者json web token)
-- 配置统一url前缀，方便后续部署
-- 部署准备：gunicorn+supervispor

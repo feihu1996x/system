@@ -10,6 +10,7 @@
 
 import base64
 import hashlib
+import re
 
 
 def md5_hash( string ):
@@ -20,3 +21,13 @@ def md5_hash( string ):
     string = base64.encodebytes( string.encode("utf-8") )
     m.update(string)
     return m.hexdigest()  
+
+def get_dict( string ):
+    """
+    由字符串(如a=1&b=2)得到字典
+    """
+    new_dict = dict()
+    for item in re.split( "&", string ):
+        k, v = re.split( "=", item )
+        new_dict[k] = v
+    return new_dict

@@ -16,8 +16,14 @@ pip install -r requirements.txt
 # 安装依赖（for linux）
 pip install -r requirements.linux.txt
 
+# 初始化数据库
+mysql -uroot -p qq_group_spider < qq_group_spider.sql
+
 # 启动 web server
 python manager.py runserver
+
+#  将一次过滤初始化关键词导入数据库
+python manager.py runjob -m ImportFilterKeys
 
 # 执行自动导出QQ群消息记录任务脚本
 python manager.py runjob -m spiders/messages/AutoExportGroupMsgs

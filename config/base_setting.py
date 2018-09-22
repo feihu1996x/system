@@ -34,6 +34,3 @@ MESSAGE_STATUS_MAPPING = {
     -1: "已忽略",
     1: "已跟进"
 }
-
-# 默认分页大小
-PAGE_SIZE = 10

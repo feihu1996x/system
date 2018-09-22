@@ -29,5 +29,5 @@ os.system(r"""
 echo chdir = \'{work_dir}\' >> gun.conf
 """.format(work_dir=work_dir))
 os.system(r"""
-gunicorn -k gevent -c gun.conf application:app
+gunicorn -k gevent -c gun.conf manager:app
 """)

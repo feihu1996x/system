@@ -2,7 +2,7 @@ system
 =====================
 
 ## 环境要求
-### windows：32位QQ(v8.9.6.22427) + 32位Python(v3.6)
+### windows：32位QQ(v8.9.6.22427) + 32位Python(v3.6) + Adobe Flash Player
 ### Linux：
 
 ## 实时获取鼠标坐标py脚本

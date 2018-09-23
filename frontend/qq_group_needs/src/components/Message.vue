@@ -80,7 +80,8 @@
                                     .then( function( res ){
                                         layer.alert( res.data.msg );
                                         obj.update({
-                                            status: "待跟进"
+                                            status: "待跟进",
+                                            operator: res.data.data[0].operator
                                         });
                                     } )
                                     .catch( function( err ){
@@ -94,7 +95,8 @@
                                     .then( function( res ){
                                         layer.alert( res.data.msg );
                                         obj.update( {
-                                            status: "已忽略"
+                                            status: "已忽略",
+                                            operator: res.data.data[0].operator
                                         } );
                                     } )
                                     .catch( function( err ){
@@ -109,7 +111,8 @@
                                     .then( function( res ){
                                         layer.alert( res.data.msg );
                                         obj.update({
-                                            status: "待跟进"
+                                            status: "待跟进",
+                                            operator: res.data.data[0].operator
                                         });
                                     } )
                                     .catch( function( err ){
@@ -122,7 +125,8 @@
                                 .then(function( res ){
                                     layer.alert( res.data.msg );
                                     obj.update({
-                                        status: "已跟进"
+                                        status: "已跟进",
+                                        operator: res.data.data[0].operator
                                     });
                                 })
                                 .catch(function(err){

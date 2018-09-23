@@ -46,6 +46,7 @@ class JobTask():
             qq_number = qq_account["qq_number"]
             qq_password = qq_account["qq_password"]
 
+            """
             # 打开qq
             app.logger.info( "正在打开QQ..." )
             qq = Application( backend='uia' ).start( self.qq_path )
@@ -65,6 +66,7 @@ class JobTask():
             # 点击登录按钮
             app.logger.info( "正在登录..." )
             qq.QQ.child_window(title="登   录", control_type="Button").click_input()
+            """
 
             # 打开QQ消息管理器
             app.logger.info( "正在连接新的QQ进程..." )
@@ -150,6 +152,7 @@ class JobTask():
             pyautogui.keyUp( 'f4' )
             # qq.QQ.ScrollBar.print_control_identifiers()
 
+            """
             # 关闭QQ
             app.logger.info( "正在关闭QQ..." )
             qq.QQ.click_input()
@@ -157,6 +160,7 @@ class JobTask():
             pyautogui.keyDown( 'f4' )
             pyautogui.keyUp( 'altleft' )
             pyautogui.keyUp( 'f4' ) 
+            """
 
             msgs = open( self.msg_path + r"\全部消息记录.txt","rb" ).read().decode("utf8")
 

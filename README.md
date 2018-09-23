@@ -2,7 +2,7 @@ system
 =====================
 
 ## 环境要求
-### windows：32位QQ(v8.9.6.22427) + 32位Python(v3.6) + Adobe Flash Player
+### windows：32位QQ(v8.9.6.22427) + 32位Python(v3.6)
 ### Linux：
 
 ## 实时获取鼠标坐标py脚本
@@ -44,3 +44,4 @@ python manager.py runjob -m spiders/messages/AutoGetGroupInfo
 - 重写app.logger日志模块
 - 通过增加请求拦截器，一方面可以实现统一错误处理，另一方面可以实现API权限控制并从中获取当前登录用户的信息(cookie或者json web token)
 - 消息抓取和写入数据库同步进行很耗时，可以改成异步的（借助redis）
+- 准备一个QQ小号，专门用于机器自动爬取

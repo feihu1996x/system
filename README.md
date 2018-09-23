@@ -22,7 +22,7 @@ mysql -uroot -p qq_group_spider < qq_group_spider.sql
 # 启动 开发服务器
 python manager.py runserver
 
-# 启动 生产服务器
+# 启动 生产服务器（only for linux）
 python server.py
 
 #  将一次过滤初始化关键词导入数据库

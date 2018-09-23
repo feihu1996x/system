@@ -47,5 +47,4 @@ python server.py
 
 - 在自己的服务器上部署后台系统和测试数据库
 - 编写Windows定时任务( python manager.py runjob -m spiders/messages/AutoExportGroupMsgs )
-- 准备一个QQ小号，专门用于机器自动爬取
-- 书写并发送日报、周报
+- 将公司提供的QQ账号挂在服务器， 数据库（包括QQ爬虫写入的目标数据库）改用公司的服务器

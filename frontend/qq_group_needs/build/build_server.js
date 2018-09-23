@@ -48,7 +48,33 @@ exec('rm -rf ./server/views/* && mv ./dist/index.html ./server/views/index.ejs -
                     if (err) {
                         return console.error(err);
                     }
-                    console.log("done");             
+                    console.log("done");
+                    console.log( '正在统一url前缀...' );
+                    fs.readFile('./src/api/api.js', {flag: 'r+', encoding: 'utf8'}, function (err, data) {
+                        if (err) {
+                            return console.error(err);
+                        }
+                        content = data;
+                        url_prefix_pattern = /ROUTE_PREFIX = "(.*?)";/;
+                        url_prefix = url_prefix_pattern.exec( content )?url_prefix_pattern.exec( content )[1]:"";
+                        if ( null === url_prefix ){
+                            console.error( "url_prefix not found" );
+                            return;
+                        }
+                        fs.readFile('./server/config.js', {flag: 'r+', encoding: 'utf8'}, function (err, data) {
+                            if( err ){
+                                return console.error(err);
+                            }
+                            content = data;
+                            content = content.replace( /url_prefix: ".*?"/, `url_prefix: "${url_prefix}"` );
+                            fs.writeFile('./server/config.js', content,  function(err) {
+                                if (err) {
+                                    return console.error(err);
+                                }
+                                console.log("done");
+                            });
+                        });
+                    });
                 });
             });
         });        

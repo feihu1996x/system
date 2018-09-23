@@ -11,6 +11,5 @@
 module.exports = { 
     web_host: "0.0.0.0",  // 服务器监听地址
     web_port: 8006,  // 服务器监听端口
-    url_prefix: "" // url前缀, '/qq_group_needs'
+    url_prefix: "/qq_group_needs" // url前缀, '/qq_group_needs'
 }
-

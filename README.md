@@ -2,7 +2,7 @@ system
 =====================
 
 ## 环境要求
-### windows：32位QQ(v8.9.6.22427) + 32位Python(v3.6)
+### Windows：32位QQ(v8.9.6.22427) + 32位Python(v3.6)
 ### Linux：
 
 ## 实时获取鼠标坐标py脚本
@@ -17,9 +17,9 @@ pip install -r requirements.txt
 pip install -r requirements.linux.txt
 
 # 初始化数据库
-mysql -uroot -p qq_group_spider < qq_group_spider.sql
+mysql -uroot -p system < system.sql
 
-#  将一次过滤初始化关键词导入数据库
+#  将初始化过滤关键词导入数据库
 python manager.py runjob -m ImportFilterKeys
 
 # 执行自动导出QQ群消息记录任务脚本
@@ -45,7 +45,7 @@ python server.py
 - 通过增加请求拦截器，一方面可以实现统一错误处理，另一方面可以实现API权限控制并从中获取当前登录用户的信息(cookie或者json web token)
 - 消息抓取和写入数据库同步进行很耗时，可以改成异步的（借助redis）
 
-- 在自己的服务器上部署后台系统
+- 在自己的服务器上部署后台系统和测试数据库
 - 编写Windows定时任务( python manager.py runjob -m spiders/messages/AutoExportGroupMsgs )
 - 准备一个QQ小号，专门用于机器自动爬取
 - 书写并发送日报、周报

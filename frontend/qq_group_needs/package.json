@@ -7,10 +7,14 @@
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "build-server": "node build/build_server.js",
+    "server": "cd server && node ./bin/www"
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "cookie-parser": "^1.4.3",
+    "morgan": "^1.9.1",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1"
   },

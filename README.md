@@ -45,5 +45,7 @@ python server.py
 - 通过增加请求拦截器，一方面可以实现统一错误处理，另一方面可以实现API权限控制并从中获取当前登录用户的信息(cookie或者json web token)
 - 消息抓取和写入数据库同步进行很耗时，可以改成异步的（借助redis）
 
+- 在自己的服务器上部署后台系统
+- 编写Windows定时任务( python manager.py runjob -m spiders/messages/AutoExportGroupMsgs )
 - 准备一个QQ小号，专门用于机器自动爬取
-- 编写定时任务
+- 书写并发送日报、周报

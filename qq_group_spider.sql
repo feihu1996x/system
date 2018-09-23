@@ -1,6 +1,6 @@
-CREATE DATABASE IF NOT EXISTS `qq_group_spider` DEFAULT CHARACTER SET = `utf8mb4`;
+CREATE DATABASE IF NOT EXISTS `system` DEFAULT CHARACTER SET = `utf8mb4`;
 
-USE qq_group_spider;
+USE `system`;
 
 DROP TABLE IF EXISTS `qq_group`;
 

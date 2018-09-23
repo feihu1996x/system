@@ -174,6 +174,11 @@ class MessagesService:
         qq_number_list = [ model.qq_number for model in SecondFilterQqnumber.query.all() ]
         app.logger.info( "过滤QQ号码列表长度=" + str( len( qq_number_list ) ) )
 
+        if not group_id_list and not qq_number_list:
+            app.logger.info( "过滤条件为空，不进行过滤" )
+            app.logger.info( "finished %s.MessagesService.filter_by_numbers" % ( __name__ ) )
+            return
+
         filter_rule = or_( *( [ Message.group_id == group_id for group_id in group_id_list ] + [ Message.qq_number == qq_number for qq_number in qq_number_list ] ) )
         message_model_list = Message.query.filter( filter_rule ).all()
         if message_model_list:

@@ -124,6 +124,11 @@ class JobTask():
             app.logger.info( "鼠标当前的坐标 X:" + str( x ).rjust( 4 ) + " Y:" + str( y ).rjust( 4 ) )  
             pyautogui.moveTo( x, y )
             pyautogui.click( x, y )
+            
+            # 向上移动鼠标，防止失去焦点
+            y = y - 39
+            app.logger.info( "鼠标当前的坐标 X:" + str( x ).rjust( 4 ) + " Y:" + str( y ).rjust( 4 ) )  
+            pyautogui.moveTo( x, y )
 
             # 发送快捷键"Alt+S",保存消息记录文件
             app.logger.info( "正在保存..." )

@@ -8,13 +8,13 @@
 @version: 1.0
 """
 
+import threading
 import time
 
 import pyautogui
-from pywinauto.application import Application
-
 from application import app, db
 from common.libs.messages.MessagesService import MessagesService
+from pywinauto.application import Application
 
 # 每次函数调用后暂停1秒
 pyautogui.PAUSE = 1
@@ -40,8 +40,37 @@ class JobTask():
         self.export_y_coor = app.config['EXPORT_Y_COOR']
         self.msg_file_x_coor = app.config['MSG_FILE_X_COOR']
         self.msg_file_y_coor = app.config['MSG_FILE_Y_COOR']
+        self.interval = app.config['INTERVAL']
 
-    def run(self, params):
+    def run ( self, params ):
+        """
+        运行任务
+        """
+        if self.interval: 
+            app.logger.info( "线程定时器已开启，频率是%s秒..." %( str( self.interval ) ) ) 
+            self.timer_task() 
+        else:
+            app.logger.info( "线程定时器未开启" )
+            self.task()
+
+    def timer_task( self ):
+        """
+        定时导出QQ群消息记录并写入数据库
+        """
+        self.task()
+        timer = threading.Timer( self.interval, self.timer_task )
+        timer.start()
+        while True:
+            if not timer.is_alive():
+                app.logger.info( "线程定时器已停止" )
+                break       
+            app.logger.info( "线程定时器正在运行..." )
+            time.sleep( 1 )           
+
+    def task( self ):
+        """
+        导出QQ群消息记录并写入数据库
+        """
         app.logger.info( "launching %s ..." % ( __name__ ) )
         app.logger.info( "当前屏幕宽为：" + str( self.screen_width ) + "," + "当前屏幕高为：" + str( self.screen_height ) )
 
@@ -49,7 +78,7 @@ class JobTask():
             qq_number = qq_account["qq_number"]
             qq_password = qq_account["qq_password"]
 
-            """
+            # """
             # 打开qq
             app.logger.info( "正在打开QQ..." )
             qq = Application( backend='uia' ).start( self.qq_path )
@@ -69,7 +98,7 @@ class JobTask():
             # 点击登录按钮
             app.logger.info( "正在登录..." )
             qq.QQ.child_window(title="登   录", control_type="Button").click_input()
-            """
+            # """
 
             # 打开QQ消息管理器
             app.logger.info( "正在连接新的QQ进程..." )
@@ -155,7 +184,7 @@ class JobTask():
             pyautogui.keyUp( 'f4' )
             # qq.QQ.ScrollBar.print_control_identifiers()
 
-            """
+            # """
             # 关闭QQ
             app.logger.info( "正在关闭QQ..." )
             qq.QQ.click_input()
@@ -163,7 +192,7 @@ class JobTask():
             pyautogui.keyDown( 'f4' )
             pyautogui.keyUp( 'altleft' )
             pyautogui.keyUp( 'f4' ) 
-            """
+            # """
 
             msgs = open( self.msg_path + r"\全部消息记录.txt","rb" ).read().decode("utf8")
 

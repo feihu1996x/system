@@ -72,6 +72,9 @@ def get_message():
     if operator:
         query =query.filter_by( operator=operator )
 
+    # 筛选之后分页之前计算count
+    resp_data[ "count" ] = query.count()
+
     # 实现分页加载
     page = req_dict.get( "page", 1 )
     try:
@@ -111,7 +114,7 @@ def get_message():
             })
     
     resp_data[ "data" ] = message_data_list
-    resp_data[ "count" ] = db.session.query(func.count( Message.id )).scalar()
+    # resp_data[ "count" ] = db.session.query(func.count( Message.id )).scalar()
 
     response = make_response( json.dumps( resp_data ), 200 )
     response.headers["Content-Type"] = "application/json;charset=utf-8"

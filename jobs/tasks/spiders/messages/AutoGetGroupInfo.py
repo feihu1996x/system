@@ -28,6 +28,8 @@ class JobTask():
     自动获取QQ群信息,根据QQ群名称获取QQ群号码
     """
     def __init__(self):  
+        app.config.from_pyfile( 'config/auto_get_group_info_setting.py' )        
+
         self.screen_width, self.screen_height = pyautogui.size()
         self.qq_account_list = app.config['QQ_ACCOUNT_LIST']
         self.qq_path = app.config['QQ_PATH']

@@ -29,6 +29,9 @@ class JobTask():
     自动导出QQ群消息记录
     """
     def __init__(self):  
+        
+        app.config.from_pyfile( 'config/auto_export_group_msgs_setting.py' )
+
         self.screen_width, self.screen_height = pyautogui.size()
         self.qq_account_list = app.config['QQ_ACCOUNT_LIST']
         self.qq_path = app.config['QQ_PATH']

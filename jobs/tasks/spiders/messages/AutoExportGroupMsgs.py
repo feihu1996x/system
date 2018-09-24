@@ -57,6 +57,7 @@ class JobTask():
         定时导出QQ群消息记录并写入数据库
         """
         while True:
+            time.sleep( self.interval )
             self.task()
             time.sleep( self.interval )
 

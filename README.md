@@ -2,7 +2,7 @@ system
 =====================
 
 ## 环境要求
-### Windows：32位QQ(v8.9.6.22427) + 32位Python(v3.6)
+### Windows：32位QQ(v8.9.6.22427) + 32位Python(v3.6) + chromedriver_win32(v70.0.3538.16, http://chromedriver.storage.googleapis.com/70.0.3538.16/chromedriver_win32.zip, 安装路径需要添加到PATH中) + 64位Google Chrome(v69.0.3497.100)
 ### Linux：
 
 ## 实时获取鼠标坐标py脚本

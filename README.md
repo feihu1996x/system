@@ -22,7 +22,7 @@ mysql -uroot -p system < system.sql
 #  将初始化过滤关键词导入数据库
 python manager.py runjob -m ImportFilterKeys
 
-# 执行自动导出QQ群消息记录任务脚本(可在配置文件中配置定时周期)
+# 执行自动导出QQ群消息记录任务脚本(可在配置文件中配置定时执行周期)
 python manager.py runjob -m spiders/messages/AutoExportGroupMsgs
 
 # 执行自动获取QQ群信息任务脚本

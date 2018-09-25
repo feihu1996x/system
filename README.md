@@ -28,6 +28,9 @@ python manager.py runjob -m spiders/messages/AutoExportGroupMsgs
 # 执行自动获取QQ群信息任务脚本
 python manager.py runjob -m spiders/messages/AutoGetGroupInfo
 
+# 爬取中国政府采购网公开招标项目信息(可在配置文件中配置定时执行周期)
+python manager.py runjob -m spiders/procurement/guojia/GuojiaPublic
+
 # 启动 开发服务器
 python manager.py runserver
 

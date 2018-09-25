@@ -81,3 +81,47 @@ CREATE TABLE `messages` (
   UNIQUE KEY `fingerprint` (`fingerprint`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='消息记录表';
 
+DROP TABLE IF EXISTS `government_procurement`;
+
+CREATE TABLE `government_procurement` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '项目id',
+  `fingerprint` varchar(32) NOT NULL DEFAULT '' COMMENT '项目指纹',
+  `posted` tinyint(1) NOT NULL DEFAULT '0' COMMENT '1：已推送 0：未推送 -1：推送失败',
+  `name` varchar(1000) NOT NULL DEFAULT '' COMMENT '项目标题',
+  `field` varchar(50) NOT NULL DEFAULT '' COMMENT '项目领域',
+  `desc` text NOT NULL COMMENT '项目描述',
+  `spend` varchar(1000) NOT NULL DEFAULT '100000' COMMENT '项目预算',
+  `completed_time` varchar(50) NOT NULL DEFAULT '' COMMENT '完成时间',
+  `publish_time` varchar(50) NOT NULL DEFAULT '' COMMENT '发布时间',
+  `delivery_method` varchar(50) NOT NULL DEFAULT '沟通确定' COMMENT '交付方式',
+  `publisher` varchar(50) NOT NULL DEFAULT 'system先生' COMMENT '发布人',
+  `contact_information` varchar(50) NOT NULL DEFAULT '' COMMENT '联系方式，如微信-xxx',
+  `source` varchar(1000) NOT NULL DEFAULT '' COMMENT '项目链接',
+  `updated_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
+  `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '插入时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `fingerprint` (`fingerprint`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='政府采购项目表';
+
+DROP TABLE IF EXISTS `government_procurement_filed`;
+
+CREATE TABLE `government_procurement_filed` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `filed_name` varchar(100) NOT NULL DEFAULT '' COMMENT '领域名称',
+  `updated_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
+  `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '插入时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `filed_name` (`filed_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='政府采购领域表';
+
+DROP TABLE IF EXISTS `government_procurement_filed_key`;
+
+CREATE TABLE `government_procurement_filed_key` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `filed_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '领域id',
+  `key_name` varchar(100) NOT NULL DEFAULT '' COMMENT '关键词名称',
+  `updated_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
+  `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '插入时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `key_name` (`key_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='政府采购领域关键词表';

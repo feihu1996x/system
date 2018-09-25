@@ -104,20 +104,20 @@ CREATE TABLE `procurement` (
   UNIQUE KEY `fingerprint` (`fingerprint`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='采购项目表';
 
-DROP TABLE IF EXISTS `procurement_filed`;
+DROP TABLE IF EXISTS `procurement_field`;
 
-CREATE TABLE `procurement_filed` (
+CREATE TABLE `procurement_field` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `filed_name` varchar(100) NOT NULL DEFAULT '' COMMENT '领域名称',
+  `field_name` varchar(100) NOT NULL DEFAULT '' COMMENT '领域名称',
   `updated_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
   `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '插入时间',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `filed_name` (`filed_name`)
+  UNIQUE KEY `field_name` (`field_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='采购领域表';
 
-DROP TABLE IF EXISTS `procurement_filed_key`;
+DROP TABLE IF EXISTS `procurement_field_key`;
 
-CREATE TABLE `procurement_filed_key` (
+CREATE TABLE `procurement_field_key` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `field_id` bigint(20) NOT NULL COMMENT '领域id',
   `key_name` varchar(100) NOT NULL DEFAULT '' COMMENT '关键词名称',

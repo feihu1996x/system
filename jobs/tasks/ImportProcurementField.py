@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 """
-@file: ImportProcurementFiled.py
+@file: ImportProcurementField.py
 @brief: 数据库初始化：插入采购领域及其对应的关键词
 @author: feihu1996.cn
 @date: 18-09-25
@@ -10,13 +10,13 @@
 import time
 
 from application import app, db
-from common.models.procurement.ProcurementFiled import ProcurementFiled
-from common.models.procurement.ProcurementFiledKey import ProcurementFiledKey
+from common.models.procurement.ProcurementField import ProcurementField
+from common.models.procurement.ProcurementFieldKey import ProcurementFieldKey
 
 
 class JobTask():
     """
-    python manager.py runjob -m ImportProcurementFiled
+    python manager.py runjob -m ImportProcurementField
     数据库初始化：插入采购领域及其对应的关键词
     """
     def __init__(self):  
@@ -157,21 +157,21 @@ class JobTask():
         app.logger.info( 'executing %s' % ( __name__ ) )
         
         for field_name,field_key_list in self.target.items():
-            procurement_filed_model = ProcurementFiled.query.filter_by( filed_name=field_name ).first()
-            if not procurement_filed_model:
+            procurement_field_model = ProcurementField.query.filter_by( field_name=field_name ).first()
+            if not procurement_field_model:
                 app.logger.info( "正在插入新的采购领域" )
-                procurement_filed_model = ProcurementFiled()
-                procurement_filed_model.filed_name = field_name
-                db.session.add( procurement_filed_model )
+                procurement_field_model = ProcurementField()
+                procurement_field_model.field_name = field_name
+                db.session.add( procurement_field_model )
                 db.session.commit()
             for key_name in field_key_list:
-                procurement_filed_key_model = ProcurementFiledKey.query.filter_by( key_name=key_name ).first()
-                if not procurement_filed_key_model:
+                procurement_field_key_model = ProcurementFieldKey.query.filter_by( key_name=key_name ).first()
+                if not procurement_field_key_model:
                     app.logger.info( "正在插入新的%s采购领域关键词" % field_name )
-                    procurement_filed_key_model = ProcurementFiledKey()
-                    procurement_filed_key_model.field_id = procurement_filed_model.id
-                    procurement_filed_key_model.key_name = key_name
-                    db.session.add( procurement_filed_key_model )
+                    procurement_field_key_model = ProcurementFieldKey()
+                    procurement_field_key_model.field_id = procurement_field_model.id
+                    procurement_field_key_model.key_name = key_name
+                    db.session.add( procurement_field_key_model )
                     db.session.commit()
 
         app.logger.info( "finished %s" % ( __name__ ) )

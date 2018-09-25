@@ -41,7 +41,7 @@ class ProcurementService:
 
                 procurement_model = Procurement.query.filter_by( fingerprint=fingerprint ).first()
                 if not procurement_model:  # 项目指纹不一致时才插入数据
-                    app.logger.info( "正在插入新的采购项目%s" % name )
+                    app.logger.info( "正在插入新的采购项目：%s" % name )
                     procurement_model = Procurement()
                     procurement_model.fingerprint = fingerprint
                     procurement_model.name = name

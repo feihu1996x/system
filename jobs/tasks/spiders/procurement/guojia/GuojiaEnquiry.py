@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 
 """
-@file: GuojiaPublic.py
-@brief: 中国政府采购网 公开招标 项目信息爬取
+@file: GuojiaEnquiry.py
+@brief: 中国政府采购网 询价公告 项目信息爬取
 @author: feihu1996.cn
-@date: 18-09-17
+@date: 18-09-25
 @version: 1.0
 """
 
@@ -23,13 +23,13 @@ from common.models.procurement.ProcurementFieldKey import ProcurementFieldKey
 
 class JobTask():
     """
-    python manager.py runjob -m spiders/procurement/guojia/GuojiaPublic
-    中国政府采购网 公开招标 项目信息爬取
+    python manager.py runjob -m spiders/procurement/guojia/GuojiaEnquiry
+    中国政府采购网 询价公告 项目信息爬取
     """
     def __init__(self):  
-        app.config.from_pyfile( 'config/procurement_guojia_public_setting.py' )
+        app.config.from_pyfile( 'config/procurement_guojia_enquiry_setting.py' )
         self.interval = app.config['INTERVAL']
-        self.entry_url_template = "http://search.ccgp.gov.cn/bxsearch?searchtype=1&page_index=1&bidSort=&buyerName=&projectId=&pinMu=&bidType=1&dbselect=bidx&kw={key_name}&start_time=2018%3A09%3A18&end_time=2018%3A09%3A25&timeType=2&displayZone=&zoneId=&pppStatus=0&agentName="
+        self.entry_url_template = "http://search.ccgp.gov.cn/bxsearch?searchtype=1&page_index=1&bidSort=&buyerName=&projectId=&pinMu=&bidType=2&dbselect=bidx&kw={key_name}&start_time=2018%3A09%3A18&end_time=2018%3A09%3A25&timeType=2&displayZone=&zoneId=&pppStatus=0&agentName="
         self.project_url_xpath = '//ul[@class="vT-srch-result-list-bid"]/li/a/@href'  # 匹配项目url的XPATH表达式
         self.next_page_btn_xpath = '//p[@class="pager"]/a[@class="next"]'  # 匹配下一页按钮的XPATH表达式
         self.project_content_xpath = '//div[@class="vF_detail_main"]'  # 匹配项目内容的XPATH表达式
@@ -56,7 +56,7 @@ class JobTask():
 
     def task( self ):
         """
-        爬取中国政府采购网公开招标项目信息
+        爬取中国政府采购网询价公告项目信息
         """
         app.logger.info( "launching %s ..." % ( __name__ ) )
         browser = webdriver.Chrome()  # 打开浏览器

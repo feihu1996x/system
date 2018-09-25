@@ -13,6 +13,7 @@ class Procurement(db.Model):
     posted = db.Column(db.Integer, nullable=False, server_default=db.FetchedValue())
     name = db.Column(db.String(1000), nullable=False, server_default=db.FetchedValue())
     field = db.Column(db.String(50), nullable=False, server_default=db.FetchedValue())
+    project_type =  db.Column(db.String(50), nullable=False, server_default=db.FetchedValue())
     desc = db.Column(db.Text, nullable=False)
     spend = db.Column(db.String(1000), nullable=False, server_default=db.FetchedValue())
     completed_time = db.Column(db.String(50), nullable=False, server_default=db.FetchedValue())

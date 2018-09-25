@@ -89,6 +89,7 @@ CREATE TABLE `procurement` (
   `posted` tinyint(1) NOT NULL DEFAULT '0' COMMENT '1：已推送 0：未推送 -1：推送失败',
   `name` varchar(1000) NOT NULL DEFAULT '' COMMENT '项目标题',
   `field` varchar(50) NOT NULL DEFAULT '' COMMENT '项目领域',
+  `project_type` varchar(50) NOT NULL DEFAULT '政采项目' COMMENT '采购项目类型',
   `desc` text NOT NULL COMMENT '项目描述',
   `spend` varchar(1000) NOT NULL DEFAULT '100000' COMMENT '项目预算',
   `completed_time` varchar(50) NOT NULL DEFAULT '' COMMENT '完成时间',
@@ -118,7 +119,7 @@ DROP TABLE IF EXISTS `procurement_filed_key`;
 
 CREATE TABLE `procurement_filed_key` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `filed_id` bigint(20) NOT NULL COMMENT '领域id',
+  `field_id` bigint(20) NOT NULL COMMENT '领域id',
   `key_name` varchar(100) NOT NULL DEFAULT '' COMMENT '关键词名称',
   `updated_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
   `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '插入时间',

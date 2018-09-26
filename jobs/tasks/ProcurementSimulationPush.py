@@ -26,11 +26,7 @@ class JobTask():
     def __init__(self):          
         app.config.from_pyfile( 'config/procurement_simulation_push_setting.py' )
         self.interval = app.config['INTERVAL']
-
-        self.browser = webdriver.Chrome()  # 打开浏览器
-        self.browser.get( "http://www.baozizhuli.com/" )  # 访问孢子科技
-        if "Y" != input('请扫码进入登录状态, 确认后输入"Y"以继续：'):
-            sys.exit( 1 )
+        self.push_url = 'http://m.dev.baozizhuli.com/api/requirement/issue'  # 接口地址
 
     def run ( self, params ):
         """
@@ -58,6 +54,21 @@ class JobTask():
         """
         app.logger.info( "launching %s ..." % ( __name__ ) )
 
-        print( "政采项目模拟推送" )
+        procurement_model_list = Procurement.query.filter( Procurement.posted != 1 ).all()  # 未推送或推送失败的政采项目model列表
 
+        app.logger.info( "政采项目model列表总长度为：%d" % ( len( procurement_model_list ) ) )
+        for procurement_model in procurement_model_list:  # 遍历政采项目model列表
+            # TODO: 填充请求参数，调用孢子推送接口
+            params = {
+                'title': "", # str_title[0:50] 
+                'delivery_way': "",
+                'description': "",
+                'budget': '',
+                'cate_id': '',
+                'tag_id': '',
+                'delivery_time': '',
+                'user_id': 2,
+                'contact_way': '',
+                'spider_url': '' 
+            }
         app.logger.info( "finished %s" % ( __name__ ) )

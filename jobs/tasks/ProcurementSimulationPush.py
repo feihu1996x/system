@@ -12,6 +12,7 @@ import sys
 import time
 
 from lxml import etree
+import requests
 from selenium import webdriver
 
 from application import app, db
@@ -26,7 +27,12 @@ class JobTask():
     def __init__(self):          
         app.config.from_pyfile( 'config/procurement_simulation_push_setting.py' )
         self.interval = app.config['INTERVAL']
-        self.push_url = 'http://m.dev.baozizhuli.com/api/requirement/issue'  # 接口地址
+        self.push_url = 'http://m.dev.baozizhuli.com/api/requirement/issue'  # 接口调用地址
+        self.headers = {  # 请求头部
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:62.0) Gecko/20100101 Firefox/62.0',
+            'Accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
 
     def run ( self, params ):
         """
@@ -57,18 +63,30 @@ class JobTask():
         procurement_model_list = Procurement.query.filter( Procurement.posted != 1 ).all()  # 未推送或推送失败的政采项目model列表
 
         app.logger.info( "政采项目model列表总长度为：%d" % ( len( procurement_model_list ) ) )
+        
         for procurement_model in procurement_model_list:  # 遍历政采项目model列表
-            # TODO: 填充请求参数，调用孢子推送接口
-            params = {
-                'title': "", # str_title[0:50] 
-                'delivery_way': "",
-                'description': "",
-                'budget': '',
-                'cate_id': '',
-                'tag_id': '',
-                'delivery_time': '',
+            params_dict = {
+                'title': procurement_model.name[0:29],
+                'description': procurement_model.desc[0:1999],
+                'spider_url': procurement_model.source,
+                'delivery_way': 'qq',
+                'budget': 1,
+                'cate_id': 1,
+                'tag_id': 100,
+                'delivery_time': '2018-10-30',
                 'user_id': 2,
-                'contact_way': '',
-                'spider_url': '' 
+                'contact_way': 'qq',
             }
+            push_response = requests.post( self.push_url, headers=self.headers, data=params_dict )
+            if 0 != push_response.json()['code']:
+                app.logger.info( "项目推送失败" )
+                procurement_model.posted = -1
+                db.session.add( procurement_model )
+                db.session.commit()
+            else:
+                app.logger.info( "项目推送成功" )
+                procurement_model.posted = 1
+                db.session.add( procurement_model )
+                db.session.commit()                
+
         app.logger.info( "finished %s" % ( __name__ ) )

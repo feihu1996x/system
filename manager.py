@@ -7,7 +7,7 @@ from jobs.launcher import runJob
 from test.launcher import runTest
 
 # run web server
-manager.add_command( "runserver", Server( host='0.0.0.0',port=app.config['SERVER_PORT'],use_debugger = True ,use_reloader = True) )
+manager.add_command( "runserver", Server( host='0.0.0.0',port=app.config['SERVER_PORT'],use_debugger = app.config['DEBUG'] ,use_reloader = True) )
 
 # run job task
 manager.add_command('runjob', runJob() )

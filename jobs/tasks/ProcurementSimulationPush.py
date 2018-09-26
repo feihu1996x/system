@@ -80,11 +80,13 @@ class JobTask():
             push_response = requests.post( self.push_url, headers=self.headers, data=params_dict )
             if 0 != push_response.json()['code']:
                 app.logger.info( "项目推送失败" )
+                app.logger.info( push_response.json() )
                 procurement_model.posted = -1
                 db.session.add( procurement_model )
                 db.session.commit()
             else:
                 app.logger.info( "项目推送成功" )
+                app.logger.info( push_response.json() )
                 procurement_model.posted = 1
                 db.session.add( procurement_model )
                 db.session.commit()                

@@ -50,7 +50,6 @@ class JobTask():
         定时执行任务
         """
         while True:
-            time.sleep( self.interval )
             self.task()
             time.sleep( self.interval )
 

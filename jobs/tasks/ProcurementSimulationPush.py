@@ -66,7 +66,7 @@ class JobTask():
         for procurement_model in procurement_model_list:  # 遍历政采项目model列表
             params_dict = {
                 'title': procurement_model.name[0:29],
-                'description': procurement_model.desc[0:1999],
+                'description': ( procurement_model.publish_time + ' ' + procurement_model.desc )[0:1999],
                 'spider_url': procurement_model.source,
                 'delivery_way': 'qq',
                 'budget': 1,
@@ -76,6 +76,8 @@ class JobTask():
                 'user_id': 2,
                 'contact_way': 'qq',
             }
+            app.logger.info( params_dict )
+            # """  # TODO
             push_response = requests.post( self.push_url, headers=self.headers, data=params_dict )
             if 0 != push_response.json()['code']:
                 app.logger.info( "项目推送失败" )
@@ -88,6 +90,9 @@ class JobTask():
                 app.logger.info( push_response.json() )
                 procurement_model.posted = 1
                 db.session.add( procurement_model )
-                db.session.commit()                
+                db.session.commit()  
+            # """  # TODO
+
+            # break # TODO         
 
         app.logger.info( "finished %s" % ( __name__ ) )

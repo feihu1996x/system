@@ -35,9 +35,15 @@ class ProcurementService:
             desc = clean_string( ''.join( project_content_treedata.xpath( desc_xpath ) ) )
             app.logger.info( "项目描述：%s" % desc )
 
+            # 发布时间
+            publish_time_xpath = '//span[@id="pubTime"]/descendant-or-self::*/text()'
+            publish_time = ''.join( project_content_treedata.xpath( publish_time_xpath ) )
+            app.logger.info( "发布时间：%s" % publish_time )
+
+            # """ # TODO
             if name and desc:
                 # 项目指纹
-                fingerprint = md5_hash( name + project_url + field )
+                fingerprint = md5_hash( name + project_url + field + publish_time )
 
                 procurement_model = Procurement.query.filter_by( fingerprint=fingerprint ).first()
                 if not procurement_model:  # 项目指纹不一致时才插入数据
@@ -48,7 +54,9 @@ class ProcurementService:
                     procurement_model.field = field
                     procurement_model.desc = desc
                     procurement_model.source = project_url
+                    procurement_model.publish_time = publish_time
                     db.session.add( procurement_model )
-                    db.session.commit()                
+                    db.session.commit()   
+            # """ # TODO      
 
         app.logger.info( "finished %s.ProcurementService.process_project_content" % ( __name__ ) )

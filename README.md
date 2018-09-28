@@ -10,7 +10,11 @@ system
 - 64位Google Chrome(v69.0.3497.100)
 - JDK 1.8.0_181 x64
 - Android SDK
-- 夜神安卓模拟器
+- 夜神安卓模拟器（ v6.0.7.5 ）+ 微信app（v6.6.7）
+- Node.js( v8.12.0 )
+- Appium( V1.9.1 )
+- appium-desktop( v1.7.1 )
+- appium-doctor( v1.5.0 )
 
 ### Linux：
 

@@ -1,32 +1,14 @@
 一、今日进展：
 
-- Appium环境搭建
-- 尝试使用python+appium实现对模拟器中微信app的自动化控制
-- 使用Appium-Desktop对微信自动化控制进行相关测试
-- 编写微信自动化控制测试脚本
-
 二、明日计划：
 
-- 编写微信自动化控制脚本以及相关数据库表设计
-
 三、问题与反思：
-
-- Appium是一个开源测试自动化框架，可用于原生，混合和移动Web应用程序测试
-- 它使用WebDriver协议驱动iOS，Android和Windows应用程序
-- Appium是在手机操作系统自带的测试框架基础上实现的， Android（版本>4.3）使用的是UIAutomator
-- Appium Server是Appium框架的核心。它是一个基于Node.js实现的HTTP服务器
-- Appium服务器的主要功能是接受从Appium客户端发起的连接，监听从客户端发送来的命令，将命令发送给bootstrap.jar（iOS手机为bootstrap.js）执行，并将命令的执行结果通过HTTP应答反馈给Appium客户端
-- Bootstrap.jar是在Android手机上运行的一个应用程序，它在手机上扮演TCP服务器的角色
-- 当Appium服务器需要运行命令时，Appium服务器会与Bootstrap.jar建立TCP通信，并把命令发送给Bootstrap.jar；Bootstrap.jar负责运行测试命令
-- 在电脑（client）上运行自动化测试脚本，调用的是webdriver的接口，appium server接收到我们client上发送过来的命令后，他会将这些命令转换为UIautomator认识的命令，然后由UIautomator来在设备上执行自动化
-- 客户端与服务器端通过JSON Wire Protocol进行通信
-- Appium客户端可以使用不同的语言来实现，如Python，java等
-- 虽然Appium是为自动化测试服务的，但是我们可以用它来干些其他事情，比如爬取App数据
 
 TODO:
 - 编写微信自动化控制脚本以及相关数据库表设计
     消息抓取思路：仅仅针对微信首页第一栏（因为每当消息更新时都会显示在第一栏，没必要把每一栏都遍个历）（点进去）进行消息的抓取（群名称或者好友名称+消息发送者+消息的内容）+ 一次过滤（根据关键字保留消息）+ 二次过滤（根据微信昵称去掉无关消息） + 入库 + 推送到孢子后台
     消息定时定向发送思路：从孢子后台获取项目信息 + 找到对应的群 + 把消息发送出去
+- 政采爬虫推送接口修改
 - QQ爬虫部署
 - 爬取其他网站的政采项目
 - 微信模板消息相关开发任务

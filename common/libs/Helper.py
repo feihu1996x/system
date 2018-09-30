@@ -9,8 +9,11 @@
 """
 
 import base64
+import datetime
 import hashlib
 import re
+import win32con
+import win32clipboard as w
 
 
 def md5_hash( string ):
@@ -38,3 +41,74 @@ def clean_string( string ):
     """
     return re.sub( r"\s|\n", "", string.strip() )
     
+def get_simulator_window_size( driver ):
+    """
+    Appium获取模拟器屏幕尺寸
+    """
+    width = driver.get_window_size()['width']
+    height = driver.get_window_size()['height']
+    return width, height
+
+def driver_swipe_up( current_simulator_window_size,driver ):
+    """
+    Appium控制模拟器屏幕向上滑动
+    """
+    l = current_simulator_window_size
+    x1 = int( l[0] * 0.5 )
+    y1 = int( l[1] * 0.95 )
+    y2 = int( l[1] * 0.35 )
+    driver.swipe( x1, y1, x1, y2, 1000 )    
+
+def driver_swipe_right( current_simulator_window_size,driver ):
+    """
+    Appium控制模拟器屏幕向右滑动
+    """
+    l = current_simulator_window_size
+    y1 = int( l[1] * 0.5 )
+    x1 = int( l[0] * 0.25 )
+    x2 = int( l[0] * 0.95 )
+    driver.swipe( x1, y1, x2, y1, 1000 )  
+
+def driver_swipe_down( current_simulator_window_size,driver ):
+    """
+    Appium控制模拟器屏幕向下滑动
+    """
+    l = current_simulator_window_size
+    x1 = int( l[0] * 0.5 )
+    y1 = int( l[1] * 0.35 )
+    y2 = int( l[1] * 0.45 )
+    driver.swipe( x1, y1, x1, y2, 1000 )   
+
+def driver_swipe_left( current_simulator_window_size,driver ):
+    """
+    Appium控制模拟器屏幕向左滑动
+    """
+    l = current_simulator_window_size
+    x1 = int( l[0]*0.9 )
+    y1 = int( l[1]*0.5 )
+    x2 = int( l[0]*0.1 )
+    driver.swipe( x1, y1, x2, y1, 1000 )
+
+def get_current_date( format="%Y-%m-%d %H:%M:%S" ):
+    """
+    获取当前时间
+    """
+    return datetime.datetime.now().strftime( format )
+
+def get_clipboard_text():
+    """
+    获取剪贴板内容
+    """
+    w.OpenClipboard()
+    d = w.GetClipboardData( win32con.CF_TEXT )
+    w.CloseClipboard()
+    return d
+
+def set_clipboard_text( aString ):
+    """
+    设置剪贴板内容
+    """
+    w.OpenClipboard()
+    w.EmptyClipboard()
+    w.SetClipboardData(win32con.CF_TEXT, aString)
+    w.CloseClipboard()

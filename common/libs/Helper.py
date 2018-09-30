@@ -68,14 +68,14 @@ def driver_swipe_right( current_simulator_window_size,driver ):
     x2 = int( l[0] * 0.95 )
     driver.swipe( x1, y1, x2, y1, 1000 )  
 
-def driver_swipe_down( current_simulator_window_size,driver ):
+def driver_swipe_down( current_simulator_window_size,driver, start_y=0.35, end_y=0.65 ):
     """
     Appium控制模拟器屏幕向下滑动
     """
     l = current_simulator_window_size
     x1 = int( l[0] * 0.5 )
-    y1 = int( l[1] * 0.35 )
-    y2 = int( l[1] * 0.45 )
+    y1 = int( l[1] * start_y )
+    y2 = int( l[1] * end_y )
     driver.swipe( x1, y1, x1, y2, 1000 )   
 
 def driver_swipe_left( current_simulator_window_size,driver ):

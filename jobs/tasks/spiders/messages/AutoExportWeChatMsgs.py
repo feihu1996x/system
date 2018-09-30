@@ -100,7 +100,7 @@ class JobTask():
                     app.logger.info( "发现新消息提示框,正在继续向下滑屏..." )
                     driver_swipe_down( current_simulator_window_size, self.driver )
                 except NoSuchElementException:
-                    app.logger.info( "没有找到新消息提示框，只向下滑屏10次..." )
+                    app.logger.info( "没有找到新消息提示框，只向下滑屏3次..." )
                     for i in range(0, 10):
                         driver_swipe_down( current_simulator_window_size, self.driver )
                         self.get_current_page_msgs( group_name=group_name, send_time=send_time )

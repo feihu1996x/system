@@ -22,8 +22,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
 from application import app, db
-from common.libs.Helper import (driver_swipe_down, get_current_date,
-                                get_simulator_window_size)
+from common.libs.Helper import (driver_swipe_down, get_clipboard_text,
+                                get_current_date, get_simulator_window_size)
 from common.libs.messages.MessagesService import MessagesService
 
 
@@ -176,28 +176,10 @@ class JobTask():
                     self.driver.find_element_by_android_uiautomator( # 复制当前文字消息
                         'new UiSelector().text("复制")'
                     ).click()    
-
-                    edit_input = self.driver.find_element_by_id( 'com.tencent.mm:id/ac8' )  # 获取输入框元素   
-
-                    app.logger.info( '长按"输入框"2秒钟' )
-                    TouchAction( self.driver ).long_press(  # 长按"输入框"2秒钟
-                        edit_input, duration=2000
-                    ).wait( 200 ).release().perform()
-
-                    # TODO:安卓系统升级到5.1.1后可以直接获取toast
-                    app.logger.info( '点击"粘贴"' )
-                    TouchAction( self.driver ).press(  # 点击"粘贴"
-                        x=edit_input.location.get('x'), y=edit_input.location.get('y')-20
-                    ).release().perform()
                     
-                    app.logger.info( '获取输入框的文字' )
-                    content = self.wait.until(EC.presence_of_element_located(
-                        ( By.ID,'com.tencent.mm:id/ac8' )
-                    )).get_attribute( 'text' )
-                    app.logger.info( '匹配到文字消息:%s' %( content ) )
-
-                    app.logger.info( '清空输入框' )
-                    edit_input.clear()  # 清空输入框                       
+                    app.logger.info( '获取剪贴板的文字消息' )
+                    content = get_clipboard_text()
+                    app.logger.info( '匹配到文字消息:%s' %( content ) )                
                 except:
                     app.logger.info( traceback.format_exc() )
                     app.logger.info( '当前消息信息不完全, 跳过当前消息' )

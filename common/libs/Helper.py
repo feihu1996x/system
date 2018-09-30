@@ -12,8 +12,7 @@ import base64
 import datetime
 import hashlib
 import re
-import win32con
-import win32clipboard as w
+import pyperclip
 
 
 def md5_hash( string ):
@@ -99,16 +98,10 @@ def get_clipboard_text():
     """
     获取剪贴板内容
     """
-    w.OpenClipboard()
-    d = w.GetClipboardData( win32con.CF_TEXT )
-    w.CloseClipboard()
-    return d
+    return pyperclip.paste()
 
 def set_clipboard_text( aString ):
     """
     设置剪贴板内容
     """
-    w.OpenClipboard()
-    w.EmptyClipboard()
-    w.SetClipboardData(win32con.CF_TEXT, aString)
-    w.CloseClipboard()
+    pyperclip.copy( aString )

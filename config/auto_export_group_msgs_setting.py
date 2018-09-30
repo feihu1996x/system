@@ -11,18 +11,18 @@ INTERVAL = 0
 
 # qq账号配置
 QQ_ACCOUNT_LIST = [
-    {
-        "qq_number": "770761627",
-        "qq_password": "QQ0119870915!LHT"
-    },
+    # {
+    #     "qq_number": "770761627",  # TODO:暂时不能登录
+    #     "qq_password": "QQ0119870915!LHT"
+    # },
     {
         "qq_number": "347946089",
         "qq_password": "QQqwert!qwe"
-    },     
+    },    
     {
         "qq_number": "3414664932",
         "qq_password": "qq19870915!lht"
-    },        
+    },       
     {
         "qq_number": "474753408",
         "qq_password": "dadada123"

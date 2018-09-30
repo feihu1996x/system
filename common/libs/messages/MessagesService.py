@@ -13,7 +13,7 @@ import re
 from sqlalchemy import or_
 
 from application import app, db
-from common.libs.Helper import md5_hash
+from common.libs.Helper import get_current_date, md5_hash
 from common.models.messages.FirstFilterKeys import FirstFilterKey
 from common.models.messages.Messages import Message
 from common.models.messages.OriginalMessages import OriginalMessage
@@ -161,9 +161,9 @@ class MessagesService:
     @staticmethod
     def filter_by_numbers():
         """
-        根据给定的QQ群号码或者QQ号，
+        根据给定的QQ/微信群号码或者QQ/微信号，
         过滤消息记录表，
-        将QQ群或者QQ对应的消息记录删除
+        将QQ/微信群或者QQ/微信对应的消息记录删除
         """
         app.logger.info( "executing %s.MessagesService.filter_by_numbers" % ( __name__ ) )
 
@@ -191,7 +191,7 @@ class MessagesService:
     @staticmethod
     def update_messages():
         """
-        根据过滤关键字和过滤QQ群、QQ号码，
+        根据过滤关键字和过滤QQ/微信群、QQ/微信号码，
         过滤消息记录表
         """
         app.logger.info( "executing %s.MessagesService.update_messages" % ( __name__ ) )
@@ -215,3 +215,68 @@ class MessagesService:
         MessagesService.filter_by_numbers()
 
         app.logger.info( "finished %s.MessagesService.update_messages" % ( __name__ ) )
+
+    @staticmethod
+    def save_wechat_group( group_name=None, group_number=None ):
+        """
+        微信群入库
+        """
+        app.logger.info( "executing %s.MessagesService.save_wechat_group" % ( __name__ ) )
+        
+        if group_name:
+            group_name += "(微信群)"
+            qq_group_model = QqGroup.query.filter_by( group_name=group_name ).first()
+            if not qq_group_model:
+                app.logger.info( '新的微信群正在入库...' )
+                qq_group_model = QqGroup()
+                qq_group_model.group_name = group_name    
+                if group_number:
+                    qq_group_model.group_number = group_number
+                db.session.add( qq_group_model )
+                db.session.commit()
+
+        app.logger.info( "finished %s.MessagesService.save_wechat_group" % ( __name__ ) )
+
+    @staticmethod
+    def save_wechat_group_msg( **kwargs ):
+        """
+        微信群消息入库
+        """
+        app.logger.info( "executing %s.MessagesService.save_wechat_group_msg" % ( __name__ ) )
+
+        group_name = kwargs.get( 'group_name', None )  # 群聊名称
+        group_number = kwargs.get( 'group_number', None )  # 群聊号码
+        sender_name = kwargs.get( 'sender_name', None )  # 用户昵称
+        content = kwargs.get( 'content', None )  # 消息内容
+        send_time = kwargs.get( 'send_time', None )  # 消息发布时间
+        qq_number = kwargs.get( 'qq_number', None )  # 微信号
+
+        if group_name:
+            group_name += "(微信群)"
+            qq_group_model = QqGroup.query.filter_by( group_name=group_name ).first()
+            if not qq_group_model:
+                app.logger.info( '新的微信群正在入库...' )
+                qq_group_model = QqGroup()
+                qq_group_model.group_name = group_name    
+                if group_number:
+                    qq_group_model.group_number = group_number
+                db.session.add( qq_group_model )
+                db.session.commit()        
+
+            if sender_name and content:
+                fingerprint = md5_hash( sender_name + content )  # 计算当前消息的指纹
+                app.logger.info( '当前群消息的指纹是:%s' %( fingerprint ) )
+                original_message_model = OriginalMessage.query.filter_by( fingerprint=fingerprint ).first()
+                if not original_message_model:
+                    app.logger.info( '新的群消息正在入库...' )
+                    original_message_model = OriginalMessage()
+                    original_message_model.group_id = qq_group_model.id
+                    original_message_model.sender_name = sender_name
+                    original_message_model.qq_number = qq_number if qq_number else '微信号暂无'
+                    original_message_model.content = content
+                    original_message_model.send_time = send_time if send_time else get_current_date()
+                    original_message_model.fingerprint = fingerprint
+                    db.session.add( original_message_model )
+                    db.session.commit()
+
+        app.logger.info( "finished %s.MessagesService.save_wechat_group_msg" % ( __name__ ) )

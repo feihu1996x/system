@@ -59,7 +59,7 @@ python manager.py runjob -m ProcurementSimulationPush
 #   启动夜神安卓模拟器，并执行adb connect 127.0.0.1:62001
 #   启动Appium Server或者Appium Desktop, 启用"Allow Session Override"
 #   微信提前登录好
-#   自动抓取微信消息
+#   自动抓取微信群消息
 python manager.py runjob -m spiders/messages/AutoExportWeChatMsgs
 
 # 启动 开发服务器

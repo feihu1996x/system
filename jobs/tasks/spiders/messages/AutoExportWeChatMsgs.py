@@ -75,7 +75,7 @@ class JobTask():
             app.logger.info( "正在点击微信首页消息列表第一条,进入群消息对话框..." )
             self.wait.until( EC.presence_of_element_located( ( By.ID,'com.tencent.mm:id/as4' ) ) ).click()
 
-            # TODO:获取群聊名称
+            # 获取群聊名称
             group_name = self.wait.until( EC.presence_of_element_located( ( By.ID,'com.tencent.mm:id/hm' ) ) ).get_attribute( 'text' )
             if not group_name or not re.compile( self.group_tag_pattern ).findall( group_name ):
                 app.logger.info( "当前会话不是群聊，即将关闭..." )
@@ -88,13 +88,13 @@ class JobTask():
 
             time.sleep( 1 )  # 强制等待1秒
 
-            # TODO:消息发布时间
+            # 消息发布时间
             send_time = get_current_date()
             app.logger.info( '消息发布时间:%s' %( send_time )  )   
 
             # 不断向下滑屏，获取当前屏消息
             while True:
-                self.get_current_page_msgs()
+                self.get_current_page_msgs( group_name=group_name, send_time=send_time )
                 try:
                     self.driver.find_element_by_id( 'com.tencent.mm:id/abj' )
                     app.logger.info( "发现新消息提示框,正在继续向下滑屏..." )
@@ -103,8 +103,16 @@ class JobTask():
                     app.logger.info( "没有找到新消息提示框，只向下滑屏10次..." )
                     for i in range(0, 10):
                         driver_swipe_down( current_simulator_window_size, self.driver )
-                        self.get_current_page_msgs()
+                        self.get_current_page_msgs( group_name=group_name, send_time=send_time )
                     break
+
+            # 一次过滤，first_filter_keys表， 并保存到数据库（messages表），调用公共方法
+            app.logger.info( "正在根据关键词过滤原始消息记录表..." )
+            MessagesService.filter_by_keys()
+
+            # 二次过滤，second_filter_qqnumber表、second_filter_groupnumber表， 并保存到数据库（messages表），调用公共方法
+            app.logger.info( "根据给定的QQ/微信群号码或者QQ/微信号过滤消息记录表" )
+            MessagesService.filter_by_numbers()                    
 
         except:
             app.logger.info( traceback.format_exc() )
@@ -114,7 +122,7 @@ class JobTask():
 
         app.logger.info( "finished %s" % ( __name__ ) )
 
-    def get_current_page_msgs( self ):
+    def get_current_page_msgs( self, group_name=None, group_number=None, send_time=None ):
         """
         提取当前屏/页消息
         """
@@ -136,17 +144,17 @@ class JobTask():
                 app.logger.info( '当前消息信息不完全, 跳过当前消息' )
                 continue
 
-            # TODO: 用户昵称
-            send_name = self.wait.until( EC.presence_of_element_located(
+            # 用户昵称
+            sender_name = self.wait.until( EC.presence_of_element_located(
                 ( By.ID, 'com.tencent.mm:id/qj' )
             ) ).get_attribute( 'text' )
-            app.logger.info( '当前消息用户昵称为:%s' %( send_name ) )
+            app.logger.info( '当前消息用户昵称为:%s' %( sender_name ) )
 
             app.logger.info( '正在点击返回按钮,返回消息对话框界面...' )
             self.driver.find_element_by_id( 'com.tencent.mm:id/hs' ).click()
             self.wait.until( EC.presence_of_element_located( ( By.ID,'com.tencent.mm:id/hm' ) ) )                   
   
-            # TODO:消息内容   
+            # 消息内容   
             content = ''
             try:
                 content += message.find_element_by_id( 'com.tencent.mm:id/af2' ).get_attribute( 'text' )
@@ -169,10 +177,7 @@ class JobTask():
                         'new UiSelector().text("复制")'
                     ).click()    
 
-                    edit_input = self.driver.find_element_by_id( 'com.tencent.mm:id/ac8' )  # 获取输入框元素
-
-                    app.logger.info( '清空输入框' )
-                    edit_input.clear()  # 清空输入框      
+                    edit_input = self.driver.find_element_by_id( 'com.tencent.mm:id/ac8' )  # 获取输入框元素   
 
                     app.logger.info( '长按"输入框"2秒钟' )
                     TouchAction( self.driver ).long_press(  # 长按"输入框"2秒钟
@@ -190,7 +195,14 @@ class JobTask():
                         ( By.ID,'com.tencent.mm:id/ac8' )
                     )).get_attribute( 'text' )
                     app.logger.info( '匹配到文字消息:%s' %( content ) )
+
+                    app.logger.info( '清空输入框' )
+                    edit_input.clear()  # 清空输入框                       
                 except:
                     app.logger.info( traceback.format_exc() )
                     app.logger.info( '当前消息信息不完全, 跳过当前消息' )
-                    continue                                    
+                    continue           
+                    
+            # 对消息记录进行数据格式化，并增量保存到数据库(original_messages表)     
+            app.logger.info( "正在将消息写入数据库..." )                    
+            MessagesService.save_wechat_group_msg( sender_name=sender_name, content=content, group_name=group_name, group_number=group_number, send_time=send_time )

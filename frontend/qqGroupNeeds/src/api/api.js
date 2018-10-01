@@ -5,7 +5,7 @@ import { buildUrl } from '../utils'
 let host = "http://127.0.0.1:8080";
 
 // 统一路由前缀
-export const ROUTE_PREFIX = "";   // option /qq_group_needs
+export const ROUTE_PREFIX = "";   // option /qqGroupNeeds
 
 // 获取QQ群消息列表接口地址
 export const getMessageUrl = params => { 

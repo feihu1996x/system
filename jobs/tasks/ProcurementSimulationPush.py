@@ -27,7 +27,7 @@ class JobTask():
     def __init__(self):          
         app.config.from_pyfile( 'config/procurement_simulation_push_setting.py' )
         self.interval = app.config['INTERVAL']
-        self.push_url = 'http://m.dev.baozizhuli.com/api/requirement/issue'  # 接口调用地址
+        self.push_url = app.config['PUSH_URL']
         self.headers = {  # 请求头部
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:62.0) Gecko/20100101 Firefox/62.0',
             'Accept': 'application/json',

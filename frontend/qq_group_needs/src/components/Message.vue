@@ -39,10 +39,10 @@
                         ,cols: [[
                         {type: 'checkbox', fixed: 'left'}
                         ,{ field: 'id', title: 'ID', width:80, sort: true }
-                        ,{ field: 'group_number', title: 'QQ群号码', width:150 }
-                        ,{ field: 'group_name', title: 'QQ群名称', width:150 }
+                        ,{ field: 'group_number', title: 'QQ/微信群号码', width:150 }
+                        ,{ field: 'group_name', title: 'QQ/微信群名称', width:150 }
                         ,{ field: 'content', title: '项目信息', width:150 }
-                        ,{ field: 'qq_number', title: '发布人QQ', width:150 }
+                        ,{ field: 'qq_number', title: '发布人QQ/微信', width:150 }
                         ,{ field: 'send_time', title: '消息发布时间', width:150 }
                         ,{ field: 'status', title: '消息处理状态', width:150 }
                         ,{ field: 'operator', title: '操作者', width:150 }

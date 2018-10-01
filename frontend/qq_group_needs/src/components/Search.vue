@@ -10,7 +10,7 @@
       <input placeholder="项目信息" autocomplete="on" class="layui-input" v-model="content" >
     </div>
     <div class="layui-input-inline">
-      <input placeholder="发布人QQ" autocomplete="on" class="layui-input" v-model="qq_number" >
+      <input placeholder="发布人QQ/微信" autocomplete="on" class="layui-input" v-model="qq_number" >
     </div>
     <div class="layui-input-inline">
       <input placeholder="状态" autocomplete="on" class="layui-input" v-model="status" >

@@ -1,6 +1,6 @@
 # qq_group_needs
 
-> QQ群项目需求管理
+> QQ/微信群信息抓取系统
 
 ## Build Setup
 

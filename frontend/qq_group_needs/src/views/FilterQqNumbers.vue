@@ -3,14 +3,14 @@
     <Header></Header>
     <div class="layui-container">  
         <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
-        <legend>过滤QQ号码管理</legend>
+        <legend>过滤QQ/微信号码管理</legend>
         </fieldset>   
         <table class="layui-hide" id="filter_keys" lay-filter="filter_keys"></table>
         
         <script type="text/html" id="toolbar">
         <div class="layui-btn-container">
             
-            <button class="layui-btn layui-btn-sm" lay-event="addKey">增加QQ号码</button>
+            <button class="layui-btn layui-btn-sm" lay-event="addKey">增加QQ/微信号码</button>
             <!--
             <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
             <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
@@ -45,11 +45,11 @@ export default {
           elem: '#filter_keys'
           ,url: get_filter_qq_number_url
           ,toolbar: '#toolbar'
-          ,title: '过滤QQ群号码表'
+          ,title: '过滤QQ/微信群号码表'
           ,cols: [[
             {type: 'checkbox', fixed: 'left'}
             ,{field:'id', title:'ID', width:80, fixed: 'left', unresize: true, sort: true}
-            ,{field: 'qq_number', width: 1020, title:'QQ号码', align: 'center', edit: 'text'}
+            ,{field: 'qq_number', width: 1020, title:'QQ/微信号码', align: 'center', edit: 'text'}
             ,{fixed: 'right', title:'操作', toolbar: '#bar', width:150}
           ]]
           ,page: true

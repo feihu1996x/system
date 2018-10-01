@@ -2,7 +2,7 @@
   <div>
     <ul class="layui-nav">
       <li class="layui-nav-item">
-        <router-link :to="{ name: 'Index' }">QQ群项目需求管理</router-link>
+        <router-link :to="{ name: 'Index' }">QQ/微信群信息抓取系统</router-link>
       </li>
     </ul>    
   </div>

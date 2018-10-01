@@ -8,6 +8,7 @@
 @version: 1.0
 """
 
+import sys
 import time
 
 import pyautogui
@@ -40,6 +41,9 @@ class JobTask():
         self.msg_file_x_coor = app.config['MSG_FILE_X_COOR']
         self.msg_file_y_coor = app.config['MSG_FILE_Y_COOR']
         self.interval = app.config['INTERVAL']
+
+        if "Y" != input( "请先手动登录所有测试账号，确认姿势正确后，输入Y继续:" ):
+            sys.exit( 1 )
 
     def run ( self, params ):
         """

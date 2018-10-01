@@ -1,4 +1,4 @@
-# qq_group_needs
+# QqGroupNeeds
 
 > QQ/微信群信息抓取系统
 

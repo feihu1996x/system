@@ -21,3 +21,10 @@ export const buildUrl = function( path,params ){
     }
     return url + _paramUrl;
 }
+
+export const getCookie = function(){
+    /*
+        获取当前域下的所有cookie
+    */
+    return document.cookie;
+}

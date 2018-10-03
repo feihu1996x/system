@@ -96,8 +96,8 @@ class JobTask():
             app.logger.info( "正在登录..." )
             qq.QQ.child_window(title="登   录", control_type="Button").click_input()
 
-            app.logger.info( '强制等待5秒，若需要滑块验证，请迅速手动完成' )
-            time.sleep( 5 )  # 强制等待5秒，若需要滑块验证，请迅速手动完成
+            app.logger.info( '强制等待10秒，若需要滑块验证，请迅速手动完成' )
+            time.sleep( 10 )  # 强制等待10秒，若需要滑块验证，请迅速手动完成
 
             # 打开QQ消息管理器
             app.logger.info( "正在连接新的QQ进程..." )

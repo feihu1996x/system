@@ -38,7 +38,8 @@ def clean_string( string ):
     """
     取出string中的多余字符，如空格等
     """
-    return re.sub( r"\s|\n|★|√|×", "", string.strip() )
+    string = re.sub( r"\W", ",", string.strip() )
+    return string
     
 def get_simulator_window_size( driver ):
     """

@@ -42,9 +42,6 @@ class JobTask():
         self.msg_file_y_coor = app.config['MSG_FILE_Y_COOR']
         self.interval = app.config['INTERVAL']
 
-        if "Y" != input( "请先手动登录所有测试账号，确认姿势正确后，输入Y继续:" ):
-            sys.exit( 1 )
-
     def run ( self, params ):
         """
         运行任务
@@ -109,6 +106,7 @@ class JobTask():
             qq.QQ.TabControl.TabItem3.click_input()
 
             # 单击"我的QQ群"
+            # 默认所有QQ账号的“我的QQ群”栏处于关闭状态
             app.logger.info( "正在打开我的QQ群..." )
             qq.QQ.child_window(title="我的QQ群", control_type="ListItem").click_input()
 
@@ -129,6 +127,9 @@ class JobTask():
             # 点击“查看消息记录”按钮，打开消息管理器
             app.logger.info( "正在打开消息管理器..." )
             pyautogui.click()
+
+            app.logger.info( "等待消息加载完毕" )
+            time.sleep( 3 )  # 强制等待3秒
             
             # 导出全部消息记录
             app.logger.info( "正在导出消息记录..." )
@@ -173,19 +174,22 @@ class JobTask():
             pyautogui.keyDown('altleft')
             pyautogui.keyDown('y')
             pyautogui.keyUp('altleft')
-            pyautogui.keyUp('y') 
+            pyautogui.keyUp('y')           
+
+            app.logger.info( '等待消息保存完成' )
+            time.sleep( 10 )  # 强制等待10秒
 
             # 关闭消息管理器
             app.logger.info( "正在关闭消息管理器..." )
             pyautogui.keyDown( 'altleft' )
             pyautogui.keyDown( 'f4' )
             pyautogui.keyUp( 'altleft' )
-            pyautogui.keyUp( 'f4' )
+            pyautogui.keyUp( 'f4' )          
             # qq.QQ.ScrollBar.print_control_identifiers()
 
             # 关闭QQ
             app.logger.info( "正在关闭QQ..." )
-            qq.QQ.click_input()
+            qq.QQ.child_window(title="我的QQ群", control_type="ListItem").click_input() # 将已经打开的“我的QQ群”栏收起
             pyautogui.keyDown( 'altleft' )
             pyautogui.keyDown( 'f4' )
             pyautogui.keyUp( 'altleft' )

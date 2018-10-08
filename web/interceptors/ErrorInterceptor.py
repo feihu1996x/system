@@ -27,7 +27,26 @@ def error_404( e ):
     app.logger.info( str( e ) )
 
     resp_data['msg'] = str( e )
+    resp_data['code'] = -1
 
     response = make_response( json.dumps( resp_data ), 404 )
     response.headers["Content-Type"] = "application/json;charset=utf-8"
     return response
+
+@app.errorhandler( 405 )
+def error_405( e ):
+    resp_data = {
+        "code": 0,
+        "count": 0,
+        "msg": "操作失败~",
+        "data": []
+    }    
+
+    app.logger.info( str( e ) )
+
+    resp_data['msg'] = str( e )
+    resp_data['code'] = -1
+
+    response = make_response( json.dumps( resp_data ), 405 )
+    response.headers["Content-Type"] = "application/json;charset=utf-8"
+    return response    

@@ -11,8 +11,6 @@
 
 import time
 
-import requests
-
 from application import app, db
 from common.libs.messages.MessagesService import MessagesService
 
@@ -23,7 +21,7 @@ class JobTask():
     过滤原始消息记录
     """
     def __init__(self):          
-        app.config.from_pyfile( 'config/procurement_simulation_push_setting.py' )
+        app.config.from_pyfile( 'config/filter_original_message_setting.py' )
         self.interval = app.config['INTERVAL']
 
     def run ( self, params ):

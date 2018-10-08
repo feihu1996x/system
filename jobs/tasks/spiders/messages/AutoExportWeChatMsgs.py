@@ -42,14 +42,14 @@ class JobTask():
 
         self.group_tag_pattern = r"\(\d{1,}\)"  # 判断当前对话框是否是群消息的标识
 
-        if "Y" != input( "请手动启动安卓模拟器，输入Y继续:" ):
-            sys.exit( 1 )
+        # if "Y" != input( "请手动启动安卓模拟器，输入Y继续:" ):
+        #     sys.exit( 1 )
 
-        if "Y" != input( "请手动执行'adb connect 127.0.0.1:62001'，输入Y继续:" ):
-            sys.exit( 1 )
+        # if "Y" != input( "请手动执行'adb connect 127.0.0.1:62001'，输入Y继续:" ):
+        #     sys.exit( 1 )
 
-        if "Y" != input( "请手动启动Appium Desktop，输入Y继续:" ):
-            sys.exit( 1 )            
+        # if "Y" != input( "请手动启动Appium Desktop，输入Y继续:" ):
+        #     sys.exit( 1 )            
 
     def run ( self, params ):
         """

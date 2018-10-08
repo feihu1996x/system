@@ -58,6 +58,9 @@ python manager.py runjob -m ProcurementSimulationPush
 # 自动抓取微信群消息(可在配置文件中配置定时执行周期)
 python manager.py runjob -m spiders/messages/AutoExportWeChatMsgs
 
+# 过滤原始消息记录(可在配置文件中配置定时执行周期)
+python manager.py runjob -m FilterOriginalMessage
+
 # 启动 开发服务器
 python manager.py runserver
 

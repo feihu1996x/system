@@ -43,7 +43,7 @@
                         ,{ field: 'group_name', title: 'QQ/微信群名称', width:150 }
                         ,{ field: 'content', title: '项目信息', width:150 }
                         ,{ field: 'qq_number', title: '发布人QQ/微信', width:150 }
-                        ,{ field: 'send_time', title: '消息发布时间', width:150 }
+                        ,{ field: 'send_time', title: '消息发布时间', width:150, sort: true }
                         ,{ field: 'status', title: '消息处理状态', width:150 }
                         ,{ field: 'operator', title: '操作者', width:150 }
                         ,{fixed: 'right', title:'操作', toolbar: '#bar', width:150}

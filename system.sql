@@ -126,3 +126,15 @@ CREATE TABLE `procurement_field_key` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `key_name` (`key_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='采购领域关键词表';
+
+DROP TABLE IF EXISTS `project_requirement`;
+
+CREATE TABLE `project_requirement` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
+  `title` varchar(300) NOT NULL DEFAULT '' COMMENT '项目标题',
+  `url` varchar(300) NOT NULL DEFAULT '' COMMENT '项目链接',
+  `category` varchar(50) NOT NULL DEFAULT '' COMMENT '项目类别',
+  `updated_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '最后一次更新时间',
+  `created_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '插入时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='项目需求表';

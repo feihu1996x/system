@@ -24,7 +24,6 @@ system
 import time;import pyautogui;time.sleep(10);print(pyautogui.position())
 
 ```bash
-
 # 安装依赖（for windows）
 pip install -r requirements.txt
 
@@ -69,5 +68,7 @@ python manager.py runserver
 
 # 启动 生产服务器（only for linux）
 python server.py
-
 ```
+
+## Demo Link
+[http://dev.feihu1996.cn/qqGroupNeeds/](http://dev.feihu1996.cn/qqGroupNeeds/ "system")

@@ -5,7 +5,7 @@ URL_PREFIX = ""
 # URL_PREFIX = "/system"
 
 # 开发服务器配置
-SERVER_PORT = 8080
+SERVER_PORT = 8088
 DEBUG = True
 # DEBUG = False
 

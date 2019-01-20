@@ -2,10 +2,12 @@ import axios from 'axios'
 import { buildUrl } from '../utils'
 
 // 统一接口地址
-let host = "http://127.0.0.1:8080";
+let host = "http://127.0.0.1:8088";
+// let host = "http://dev.feihu1996.cn/system";
 
 // 统一路由前缀
-export const ROUTE_PREFIX = "";   // option /qqGroupNeeds
+export const ROUTE_PREFIX = "";
+// export const ROUTE_PREFIX = "/qqGroupNeeds"; 
 
 // 获取QQ群消息列表接口地址
 export const getMessageUrl = params => { 
